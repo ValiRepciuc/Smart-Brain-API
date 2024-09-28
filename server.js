@@ -12,22 +12,24 @@ const PORT = process.env.PORT || 3000;
 
 const db = knex({
   client: "pg",
-  connection: {
-    host: "127.0.0.1",
-    port: 5432,
-    user: "valirepciuc",
-    password: "",
-    database: "smart-brain",
-  },
+  connection: process.env.DATABASE_URL
+    ? {
+        connectionString: process.env.DATABASE_URL, // Use the DATABASE_URL for Render deployment
+        ssl: {
+          rejectUnauthorized: false, // Necessary for connecting to PostgreSQL on Render
+        },
+      }
+    : {
+        host: "127.0.0.1", // Local development settings
+        port: 5432,
+        user: "valirepciuc",
+        password: "",
+        database: "smart-brain",
+      },
 });
 
-db.select("*")
-  .from("users")
-  .then((data) => {
-    console.log(data);
-  });
-
 const app = express();
+
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -50,12 +52,3 @@ app.put("/image", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-/*
-
-/ --> this is working
-/signin --> POST success/fail
-/register --> POST user
-/profile/:userid --> GET : user
-/image --> PUT --> user (updated)
-*/
