@@ -22,7 +22,7 @@ const handleRegister = (req, res, db, bcrypt) => {
         return trx("users")
           .returning("*")
           .insert({
-            email: loginEmail[0], // Directly use the email string
+            email: loginEmail[0].email, // Directly use the email string
             name: name,
             joined: new Date(),
           })
