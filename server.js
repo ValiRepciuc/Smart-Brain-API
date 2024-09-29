@@ -14,15 +14,17 @@ const db = knex({
   client: "pg",
   connection: process.env.DATABASE_URL
     ? {
-        connectionString: process.env.DATABASE_URL, // Use the DATABASE_URL for Render deployment
+        connectionString: process.env.DATABASE_URL, // Use DATABASE_URL for Render deployment
         ssl: {
           rejectUnauthorized: false, // Necessary for connecting to PostgreSQL on Render
         },
       }
-    : {
-        console.log("Eroare");
-      },
+    : (() => {
+        console.log("Error: DATABASE_URL not provided");
+        throw new Error("DATABASE_URL environment variable is required but not provided.");
+      })(),
 });
+
 
 const app = express();
 
