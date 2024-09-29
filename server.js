@@ -50,3 +50,39 @@ app.put("/image", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+const CLARIFAI_API_URL = "https://api.clarifai.com/v2/models/face-detection/outputs";
+const CLARIFAI_API_KEY = "ec0b830809234f1b90a4d0b3f8a0b5d1";
+
+// Proxy route to Clarifai API
+app.post('/clarifai-api', (req, res) => {
+  const { input } = req.body;
+
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Key ${CLARIFAI_API_KEY}`
+    },
+    body: JSON.stringify({
+      user_app_id: {
+        user_id: 'qwe123',
+        app_id: 'my-first-application-da5bga',
+      },
+      inputs: [
+        {
+          data: {
+            image: {
+              url: input,
+            }
+          }
+        }
+      ]
+    })
+  };
+
+  fetch(CLARIFAI_API_URL, requestOptions)
+    .then(response => response.json())
+    .then(data => res.json(data))
+    .catch(err => res.status(400).json('Error communicating with Clarifai API'));
+});
