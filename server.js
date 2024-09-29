@@ -20,11 +20,7 @@ const db = knex({
         },
       }
     : {
-        host: "127.0.0.1", // Local development settings
-        port: 5432,
-        user: "valirepciuc",
-        password: "",
-        database: "smart-brain",
+        console.log("Eroare");
       },
 });
 
