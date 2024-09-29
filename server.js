@@ -21,7 +21,7 @@ const db = knex({
       }
     : (() => {
         console.log("Error: DATABASE_URL not provided");
-        throw new Error("DATABASE_URL environment variable is required but not provided.");
+        
       })(),
 });
 
